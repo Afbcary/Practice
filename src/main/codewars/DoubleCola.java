@@ -1,42 +1,51 @@
 package main.codewars;
 
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * @param names
- *            : a list of exactly 5 names
- * @param n
- *            : the name of the person who drinks the nth cola
- * @author Austin
- *
+/*
+ * This kata is only difficult for large values of n
  */
 public class DoubleCola {
-	// public static String WhoIsNext(String[] names, int n) {
-	// List<Integer> namesIndices = new ArrayList<Integer>(Arrays.asList(0, 1,
-	// 2, 3, 4));
-	//
-	// for (int i = 0; namesIndices.size() < n; i++) {
-	// Integer index = namesIndices.get(i);
-	// namesIndices.add(index);
-	// namesIndices.add(index);
-	// }
-	// return names[namesIndices.get(n - 1)];
-	// }
 	public static String WhoIsNext(String[] names, int n) {
-		int multiplier = names.length;
-		long multipleOfNumPeople = 1l;
-		long total = multipleOfNumPeople * multiplier;
-		long remainingPpl = n;
-		while (total < n) {
-			remainingPpl -= multipleOfNumPeople * multiplier;
-			multipleOfNumPeople++;
-			total += multipleOfNumPeople * multiplier;
+		List<Person> people = new ArrayList<>();
+		for (String name : names) {
+			people.add(new Person(name));
 		}
-		int i = 1;
+
+		int counter = 0;
+		Person current;
 		while (true) {
-			if (remainingPpl <= i * multipleOfNumPeople) {
-				return names[i - 1];
+			current = people.remove(0);
+			counter += current.getQuantity();
+			if (counter >= n) {
+				return current.getName();
 			}
-			i++;
+			people.add(current.doubleQuantity());
+		}
+	}
+
+	public static class Person {
+
+		private final String name;
+		private int quantity;
+
+		public Person(String name) {
+			this.name = name;
+			this.quantity = 1;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public int getQuantity() {
+			return quantity;
+		}
+
+		public Person doubleQuantity() {
+			this.quantity *= 2;
+			return this;
 		}
 
 	}
